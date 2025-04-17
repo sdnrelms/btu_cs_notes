@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Alışveriş Listesi</title>
+    <meta charset="UTF-8" />
+    <style>
+        body {
+            background-color: rgb(216, 216, 236);
+        }
+
+        hr {
+            height: 10px;
+            background-color: rgb(186, 175, 238);
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: rgb(0, 140, 255);
+        }
+
+        .button {
+            background-color: rgb(240, 161, 220);
+            color: white;
+            border: none;
+            padding: 7px 10px;
+            margin-left: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: rgb(173, 160, 240);
+        }
+
+        #pay-btn{
+            padding: 8px 20px;
+            font-size: 18px;
+            background-color: rgb(139, 118, 241);
+        }
+        #pay-btn:hover {
+            background-color: blueviolet;
+        }
+        #adres{
+            height: 100px;
+            width: 250px;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 16px; 
+        }
+        #bill{
+            margin-top: 15px; 
+            display: none; 
+            background-color: white; 
+            padding: 20px; 
+            border-radius: 10px;
+        }
+        #payment-info{
+            margin-top: 15px; 
+            display: none; 
+            background-color: rgba(255, 255, 255, 0.548); 
+            padding: 20px; 
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Ürün Ekleme</h1>
+    <div id="container">
+        <input type="text" id="item" name="item" />
+        <button class="button" id="add-btn">Ekle</button>
+        <hr />
+    </div>
+
+    <h1>Ürünler</h1>
+    <div id="container">
+        <p>Ürün Adı | Ürün Birim Fiyatı | Adet | Sil</p>
+        <div id="product-list"></div>
+    </div>
+    <hr />
+
+    <h1>Toplam</h1>
+    <p id="total">0.00 TL</p>
+    <hr>
+
+    <button class="button" id="pay-btn">Öde</button>
+
+    <div id="payment-info" style="display: none;">
+        <div class="step" id="step-1">
+            <h2>Kullanıcı Bilgileri</h2>
+            <form id="form">
+                <label for="name">Ad Soyad:</label>
+                <input type="text" id="name"><br><br>
+                <label for="phone">Telefon:</label>
+                <input type="tel" id="phone"><br><br>
+                <label for="email">E-posta:</label>
+                <input type="email" id="email"><br><br>
+            </form>
+            
+            <button class="button" onclick="prevStep(1)">Geri</button>      <!-- geriye basılsada aynı sayfada kalsın -->
+            <button class="button" onclick="nextStep(2)">İleri</button>
+        </div>
+
+        <div class="step" id="step-2" style="display: none;">
+            <h2>Sipariş Adresi</h2>
+            <textarea name="adres" id="adres" placeholder="Adres bilginizi giriniz:"></textarea>
+            <br><br>
+            <button class="button" onclick="prevStep(1)">Geri</button>
+            <button class="button" onclick="nextStep(3)">İleri</button>
+        </div>
+
+        <div class="step" id="step-3" style="display: none;">
+            <h2>Kart Bilgileri</h2>
+            <input type="text" id="card-name" placeholder="Kart Üzerindeki İsim"><br><br>
+            <input type="text" id="card-number" placeholder="Kart Numarası"><br><br>
+            <input type="month" id="card-date" name="Kart Üzerindeki Tarih"><br><br>
+            <input type="text" id="card-cvc" placeholder="CVV/CVC"><br><br>
+            <button class="button" onclick="prevStep(2)">Geri</button>
+            <button class="button" onclick="showBillInfo()">Alışverişi Tamamla</button>
+        </div>
+
+        <div id="bill">
+            <h2>Fatura</h2>
+            <p><b>İsim:</b> <span id="bill-name"></span></p>
+            <p><b>Telefon:</b> <span id="bill-phone"></span></p>
+            <p><b>E-posta:</b> <span id="bill-email"></span></p>
+            <p><b>Adres:</b> <span id="bill-address"></span></p>
+            <p><b>Toplam Tutar:</b> <span id="bill-total"></span></p>
+        </div>
+    </div>
+
+    <script>
+        const addButton = document.getElementById("add-btn");
+        const payButton = document.getElementById("pay-btn");
+        const productList = document.getElementById("product-list");
+
+        addButton.addEventListener("click", function () {
+            const inputElement = document.getElementById("item");
+            const itemValue = inputElement.value.trim();
+
+            if (itemValue === "") {
+                alert("Lütfen bir ürün adı girin!");
+                return;
+            }
+
+            const productDiv = document.createElement("div");
+            productDiv.style.marginBottom = "10px";
+
+            const nameInput = document.createElement("input");
+            nameInput.type = "text";
+            nameInput.value = itemValue;
+            nameInput.readOnly = true;
+            nameInput.style.marginRight = "10px";
+
+            const priceInput = document.createElement("input");
+            priceInput.type = "number";
+            priceInput.placeholder = "Birim Fiyatı";
+            priceInput.style.marginRight = "10px";
+            priceInput.addEventListener("input", calculateTotal);
+
+            const countInput = document.createElement("input");
+            countInput.type = "number";
+            countInput.placeholder = "Adet";
+            countInput.style.marginRight = "10px";
+            countInput.addEventListener("input", calculateTotal);
+
+            const deleteButton = document.createElement("button");
+            deleteButton.textContent = "Sil";
+            deleteButton.className = "button";
+            deleteButton.addEventListener("click", function () {
+                productList.removeChild(productDiv);
+                calculateTotal();
+            });
+
+            productDiv.appendChild(nameInput);
+            productDiv.appendChild(priceInput);
+            productDiv.appendChild(countInput);
+            productDiv.appendChild(deleteButton);
+
+            productList.appendChild(productDiv);
+
+            inputElement.value = "";
+        });
+
+        function calculateTotal() {
+            const productDivs = productList.querySelectorAll("div");
+            let total = 0;
+
+            productDivs.forEach((div) => {
+                const inputs = div.getElementsByTagName("input");
+                const price = parseFloat(inputs[1].value);
+                const count = parseFloat(inputs[2].value);
+
+                if (!isNaN(price) && !isNaN(count)) {
+                    total += price * count;
+                }
+            });
+
+            document.getElementById("total").textContent = total.toFixed(2) + " TL";
+        }
+
+        payButton.addEventListener("click", function () {
+            document.getElementById("payment-info").style.display = "block";
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+
+        function nextStep(stepNum) {
+            // Kullanıcı bilgileri kontrolü
+            if (stepNum === 2) {
+                const name = document.getElementById("name").value.trim();
+                const phone = document.getElementById("phone").value.trim();
+                const email = document.getElementById("email").value.trim();
+
+                if (name === "" || phone === "" || email === "") {
+                    alert("Lütfen tüm bilgi kutularını doldurun!");
+                    return;
+                }
+                // Email kontrolü
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailPattern.test(email)) {
+                    alert("Geçerli bir e-posta adresi girin!");
+                    return;
+                }
+            }
+
+            // Adres kontrolü
+            if (stepNum === 3) {
+                const address = document.getElementById("adres").value.trim();
+                if (address === "") {
+                    alert("Adres kısmı boş bırakılamaz!");
+                    return;
+                }
+                if (address.length < 10) {
+                    alert("Adres kısmı 10 karakterden az olamaz!");
+                    return;
+                }
+            }
+
+            // stepleri bul, gizle; sadece stepNum değeri olanı göster
+            document.querySelectorAll(".step").forEach(div => div.style.display = "none");
+            document.getElementById(`step-${stepNum}`).style.display = "block";
+        }
+
+        function prevStep(stepNum) {
+            document.querySelectorAll(".step").forEach(div => div.style.display = "none");
+            document.getElementById(`step-${stepNum}`).style.display = "block";
+        }
+
+        function showBillInfo() {
+            const name = document.getElementById("name").value.trim();
+            const phone = document.getElementById("phone").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const address = document.getElementById("adres").value.trim();
+
+            const cardName = document.getElementById("card-name").value.trim();
+            const cardNumber = document.getElementById("card-number").value.trim();
+            const cardCvc = document.getElementById("card-cvc").value.trim();
+            const cardDate = document.getElementById("card-date").value.trim();
+
+            // Kart bilgileri kontrolü
+            if (cardName === "" || cardNumber === "" || cardDate === "" || cardCvc === "") {
+                alert("Lütfen tüm kart bilgilerini doldurun!");
+                return;
+            }
+
+            // Kart numarası kontrolü
+            if (cardNumber.length < 12) {
+                alert("Lütfen geçerli bir kart numarası girin!");
+                return;
+            }
+
+            // Cvc uzunluk kontrolü
+            if (cardCvc.length < 3) {
+                alert("Lütfen geçerli bir CVC girin!");
+                return;
+            }
+
+            // Kart tarih kontrolü
+            if (cardDate === "") {
+                alert("Lütfen kartın son kullanma tarihini girin!");
+                return;
+            }
+            
+            // Sipariş onay kontrolü
+            if(cardName != "" && cardNumber != "" && cardCvc != "" && cardDate != ""){
+                const cevap = confirm("Sipariş onayı için son adım, emin misiniz?");
+                if (cevap) {
+                    alert("Siparişiniz alınmıştır! İyi günler dileriz " + name + " 😊");
+                } else {
+                    alert("Siparişiniz iptal edildi!" + " 😔");
+                    location.reload()
+                }
+            }
+
+            const total = document.getElementById("total").textContent;
+
+            document.getElementById("bill-name").textContent = name;
+            document.getElementById("bill-phone").textContent = phone;
+            document.getElementById("bill-email").textContent = email;
+            document.getElementById("bill-address").textContent = address;
+            document.getElementById("bill-total").textContent = total;
+
+            document.querySelectorAll(".step").forEach(div => div.style.display = "none");
+            document.getElementById("bill").style.display = "block";
+        }
+
+    </script>
+</body>
+
+</html>
+
