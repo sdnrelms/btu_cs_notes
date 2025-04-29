@@ -6,12 +6,12 @@ JOIN orders ON users.id = orders.user_id;
 SELECT *
 FROM users
 LEFT JOIN orders ON users.id = orders.user_id;
--- usttekiyle aynı sırada tablo olustu fakat burada siparis vermeyen de var en alt satırda
+-- usttekiyle aynı sırada tablo olustu fakat burada siparis vermeyen de var en alt satırda, cunku usersin hepsini alıyor ondan sonra ordersla esleme yapıyor, bu yuzdende siparis vermeyen musteri null donduruyor
 
 SELECT *
 FROM users
 RIGHT JOIN orders ON users.id = orders.user_id;
--- yine aynı tablo sadece burda da siparis vermeyen kisi yok. Sebebi left yapinca kisilere urun ekliyo yani bosta olsa o kisi olmalı, rightte ise urune kisiyi esliyo, urun yoksa kisi de yok
+-- yine aynı tablo sadece burda da siparis vermeyen kisi yok. Sebebi left yapinca kisilere urun ekliyo yani bosta olsa o kisi olmalı, rightte ise urune kisiyi esliyo, urun zaten kisiyle var oluyor
 
 
 -- Not: WHERE kelimesinin ardından yazılabilen tüm mantıksal ifadeler ON kelimesinin ardından da yazılabilir.
@@ -23,8 +23,13 @@ RIGHT JOIN orders ON users.id = orders.user_id;
 SELECT users.username, orders.product_name
 FROM users
 RIGHT JOIN orders ON users.id = orders.user_id;
--- burada sutun seciyorsun ve sadece alan kisiyle urun adı goruyosun
+-- burada sutun seciyorsun ve sadece alan kisi adiyla urun adı goruyosun
 
+
+SELECT U.username, U.email, O.product_name
+FROM users U
+RIGHT JOIN orders O ON U.id = O.user_id;
+-- tablo adları kısaltılabilir
 
 
 
