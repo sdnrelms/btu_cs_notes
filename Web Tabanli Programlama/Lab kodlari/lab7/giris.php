@@ -1,6 +1,4 @@
-<!-- https://chatgpt.com/share/68107d7d-0d3c-8007-a3ac-4b503030d0c2 -->
- 
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
