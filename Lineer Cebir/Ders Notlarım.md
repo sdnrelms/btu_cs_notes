@@ -1,0 +1,1 @@
+- [Lineer Cebir Ders Notlarım için Tıklayınız (Drive Bağlantısı)](https://drive.google.com/file/d/1n4mhMHTm-mTjbaDyBbHXjW8y9JGi8brF/view?usp=sharing)
