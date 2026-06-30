@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Davetiye</title>
+    <meta charset="UTF-8" />
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 0;
+        background-color: rgb(208, 235, 252);
+      }
+
+      header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 150px;
+      }
+
+      article {
+        padding: 10px;
+        margin: 10px;
+      }
+
+      .uni_png img {
+        height: 150px;
+        width: auto;
+      }
+
+      .slogan_png {
+        position: absolute;
+        right: 10px;
+      }
+
+      .slogan_png img {
+        height: 100px;
+        width: auto;
+      }
+
+      .box {
+        width: 80%; 
+        max-width: 1000px; 
+        min-width: 300px; 
+        height: auto; 
+        border: 5px solid rgb(12, 31, 141);
+        margin: auto; 
+        background-color: rgb(155, 215, 247);
+        padding: 20px; 
+        
+      }
+    
+      .box h2 {
+        text-align: left;
+        margin: 50px;
+        font-size: xx-large;
+      }
+
+      .box p {
+        padding: 10px;
+        margin: 40px;
+        font-size: x-large;
+        font-family: "Times New Roman";
+      }
+
+      .fixed_box {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: auto;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .left-box {
+        width: 400px;
+        background: #b1c5d4;
+        padding: 1px;
+        font-size: larger;
+        text-align: right;
+      }
+
+      .right-box {
+        width: 500px;
+        background: #b1c5d4;
+        padding: 1px;
+        font-size: larger;
+        text-align: left;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <div class="uni_png">
+        <img
+          src="https://depo.btu.edu.tr/img/sayfa//1691131553_33a20881d67b04f54742.png"
+          alt="universite logosu"
+        />
+      </div>
+      <div class="slogan_png">
+        <img
+          src="https://depo.btu.edu.tr/img/sayfa//1691132554_284ffd9ee8d6a4286478.png"
+          alt="slogan logosu"
+        />
+      </div>
+    </header>
+    <section>
+      <article>
+        <div class="box">
+          <h2>Etkinliğe davetlisiniz</h2>
+          <p>
+            Mimar Sinan ve Yıldırım kampüslerimiz evleniyor. Bu mutlu günde
+            sizleri de aramızda görmek isteriz.
+          </p>
+        </div>
+      </article>
+      <article>
+        <div class="fixed_box">
+          <div class="left-box">
+            <h3 style="margin-right: 15px">Tarih ve Saat</h3>
+            <p style="margin-right: 15px">01/01/2025 15.00</p>
+          </div>
+          <div class="right-box">
+            <h3 style="margin-left: 15px">Adres</h3>
+            <p style="margin-left: 15px">
+              Mimar Sinan Mahallesi Mimar Sinan Bulvarı Eflak Caddesi No:177
+              16310 Yıldırım/BURSA
+            </p>
+          </div>
+        </div>
+      </article>
+    </section>
+  </body>
+</html>

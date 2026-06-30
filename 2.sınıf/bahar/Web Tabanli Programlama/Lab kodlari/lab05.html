@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Alışveriş Listesi</title>
+    <meta charset="UTF-8" />
+    <style>
+        body {
+            background-color: rgb(216, 216, 236);
+        }
+
+        hr {
+            height: 10px;
+            background-color: rgb(186, 175, 238);
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: rgb(0, 140, 255);
+        }
+
+        .button {
+            background-color: rgb(240, 161, 220);
+            color: white;
+            border: none;
+            padding: 7px 10px;
+            margin-left: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: rgb(173, 160, 240);
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Ürün Ekleme</h1>
+    <div id="container">
+        <input type="text" id="item" name="item" />
+        <button class="button" id="btn">Ekle</button>
+        <hr />
+    </div>
+    <h1>Ürünler</h1>
+    <div id="container">
+        <p>Ürün Adı | Ürün Birim Fiyatı | Adet | Sil</p>
+        <div id="product-list"></div>
+    </div>
+    <hr />
+
+    <h1>Toplam</h1>
+    <p id="total">0.00 TL</p>
+
+    <script>
+        const buttonElement = document.querySelector("#container #btn");
+        const productList = document.getElementById("product-list");
+
+        buttonElement.addEventListener("click", function () {
+            const inputElement = document.getElementById("item");
+            const itemValue = inputElement.value.trim();
+
+            if (itemValue === "") {
+                alert("Lütfen bir ürün adı girin!");
+                return;
+            }
+
+            const productDiv = document.createElement("div");
+            productDiv.style.marginBottom = "10px";
+
+            const nameInput = document.createElement("input");
+            nameInput.type = "text";
+            nameInput.value = itemValue;
+            nameInput.readOnly = true;
+            nameInput.style.marginRight = "10px";
+
+            const priceInput = document.createElement("input");
+            priceInput.type = "number";
+            priceInput.placeholder = "Birim Fiyatı";
+            priceInput.style.marginRight = "10px";
+            priceInput.addEventListener("input", calculateTotal);
+
+            const countInput = document.createElement("input");
+            countInput.type = "number";
+            countInput.placeholder = "Adet";
+            countInput.style.marginRight = "10px";
+            countInput.addEventListener("input", calculateTotal);
+
+            const deleteButton = document.createElement("button");
+            deleteButton.textContent = "Sil";
+            deleteButton.addEventListener("click", function () {
+                productList.removeChild(productDiv);
+                calculateTotal();
+            });
+
+            productDiv.appendChild(nameInput);
+            productDiv.appendChild(priceInput);
+            productDiv.appendChild(countInput);
+            productDiv.appendChild(deleteButton);
+
+            productList.appendChild(productDiv);
+
+            inputElement.value = "";
+        });
+
+        function calculateTotal() {
+            const productDivs = productList.querySelectorAll("div");
+            let total = 0;
+
+            productDivs.forEach((div) => {
+                const inputs = div.getElementsByTagName("input");
+                const price = parseFloat(inputs[1].value);
+                const count = parseFloat(inputs[2].value);
+
+                if (!isNaN(price) && !isNaN(count)) {
+                    total += price * count;
+                }
+            });
+
+            document.getElementById("total").textContent = total.toFixed(2) + " TL";
+        }
+    </script>
+</body>
+
+</html>
